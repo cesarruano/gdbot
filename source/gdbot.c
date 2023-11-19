@@ -137,7 +137,7 @@ static int read_output(void *_gdb, char * buffer, int timeout_ms) {
 
         struct timeval tv;
         tv.tv_sec = 0;
-        tv.tv_usec = 10000; // 10 ms timeout for select
+        tv.tv_usec = 10000; // 10 ms 
 
         int select_result = select(gdb->hChildStd_OUT_Rd + 1, &read_fds, NULL, NULL, &tv);
         if (select_result > 0) {
@@ -169,14 +169,12 @@ static int read_output(void *_gdb, char * buffer, int timeout_ms) {
 
 static void send_ctrl_c(void *_gdb){
     
-
     #ifdef TARGET_WINDOWS
     SetConsoleCtrlHandler(NULL, TRUE);
     if (!GenerateConsoleCtrlEvent(CTRL_C_EVENT, 0)) {
         fprintf(stderr, "Failed to send CTRL+C event to GDB process\n");
         return;
     }
-    __sleep(500);
     SetConsoleCtrlHandler(NULL, FALSE);
     #elif defined(TARGET_POSIX)
     GDB_t * gdb = (GDB_t *)_gdb;
@@ -185,8 +183,8 @@ static void send_ctrl_c(void *_gdb){
             perror("Failed to send SIGINT to GDB process");
         }
     }
-    __sleep(500); // Maintain a consistent delay as in Windows
     #endif
+    __sleep(500);
 }
 
 
